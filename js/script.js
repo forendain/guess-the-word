@@ -28,13 +28,12 @@ guessButton.addEventListener("click", function(e){
     const playerGuess = letterInputbox.value;
     const guess = validatePlayerInput(playerGuess);
     //console.log(guess);
-
- 
     makeGuess(playerGuess);
 
     letterInputbox.value = "";
-});
 
+});
+//function that validates the input
 const validatePlayerInput = function (input) {
     const acceptedLetter = /[a-zA-Z]/;
     if (input.length === 0) {
@@ -56,6 +55,45 @@ const makeGuess = function (playerGuess) {
     } else {
         guessedLetters.push(playerGuess);
         console.log(guessedLetters);
+        showGuessedLetters();
+    }
+    updateWordInProgress(guessedLetters);
+    checkIfPLayerWin();
+};
+
+const showGuessedLetters = function() {
+    guessedLettersElement.innerHTML = "";
+    for (const letter of guessedLetters) {
+        const li = document.createElement("li");
+        li.innerText = letter;
+        guessedLettersElement.append(li);
     }
 };
+
+const updateWordInProgress = function(guessedLetters) {
+    const wordUpper = word.toUpperCase();
+    const wordArray = wordUpper.split("");
+    console.log(wordArray);
+
+    const revealWord = [];
+
+    for (letter of wordArray) {
+        if (guessedLetters.includes(letter)) {
+            revealWord.push(letter.toUpperCase());
+        } else {
+            revealWord.push("●");
+        } 
+    }
+    wordInProgress.innerText = revealWord.join("")
+};
+
+const checkIfPLayerWin =  function() {
+    if (word.toUpperCase() === wordInProgress.innerText) {
+        messageAppear.classList.add("win");
+        messageAppear.innerHTML = `<p class = "highlight"> You guessed the correct word! Congrats!<p>`;
+    }
+}
+
+
+
 
